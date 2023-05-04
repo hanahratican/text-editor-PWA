@@ -30,11 +30,33 @@ export const putDb = async (content) => {
 
   // use .put() to insert or update a record in the database
   // *********** figure out what to put in store.put() ****!
-  const request = store.put(content);
+  const request = store.put({ id: id, todo: content });
+
+  const result = await request;
+  console.log('content saved!', result);
 
 };
 
 // TODO: Add logic for a method that gets all the content from the database
-export const getDb = async () => console.error('getDb not implemented');
+export const getDb = async () => {
+  console.error('getDb not implemented');
+
+  // creates a connection to the database and a version we want to use
+  const contactDb = await openDB('jate', 1);
+
+  // create a transaction to read from the database
+  const tx = contactDb.transaction('jate', 'readonly');
+
+  // open desired object store
+  const store = tx.objectStore('jate');
+
+  // use .getAll() to get all the records from the database
+  const request = store.getAll();
+
+  const result = await request;
+  console.log('content retrieved!', result);
+  return result;
+
+};
 
 initdb();
