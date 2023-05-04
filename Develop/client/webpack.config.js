@@ -18,12 +18,39 @@ module.exports = () => {
       path: path.resolve(__dirname, 'dist'),
     },
     plugins: [
-      
+      new HtmlWebpackPlugin({ template: './src/index.html' }),
+      new WebpackPwaManifest({ fingerprints: false,
+        name: 'Jate',
+        short_name: 'Jate',
+        description: 'A simple note taking app',
+        background_color: '#ffffff',
+        theme_color: '#ffffff',
+        start_url: '/',
+        icons: [ 
+          { src: path.resolve('src/images/icon.png'), sizes: [96, 128, 192, 256, 384, 512],
+            destination: path.join('assets', 'icons'), 
+         },
+        ],
+      }),
     ],
 
     module: {
       rules: [
-        
+        {
+          test: /\.css$/i,
+          use: ['style-loader', 'css-loader'],
+        },
+        {
+        test: /\.js$/,
+        exclude: /node_modules/,
+        use: {
+          loader: 'babel-loader',
+          options: {
+            presets: ['@babel/preset-env'],
+            plugins: [require('@babel/plugin-proposal-object-rest-spread')],
+          },
+        },
+      },
       ],
     },
   };
